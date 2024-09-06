@@ -273,23 +273,90 @@ test.describe('Test suite 01', () => {
     await page.getByRole('link', { name: 'Create Reservation' }).click();
     await page.waitForTimeout(2000);
     await expect(page.getByText('New Reservation')).toBeVisible();
+    await page.waitForTimeout(2000);
 
+    await page.locator('div').filter({ hasText: /^Start \(Format YYYY-MM-DD\)$/ }).getByPlaceholder('YYYY-MM-DD').fill('2024-10-15')
+    await page.locator('div').filter({ hasText: /^End \(Format YYYY-MM-DD\)$/ }).getByPlaceholder('YYYY-MM-DD').fill('2024-10-20')
 
-
-    /*
-    await page.locator('div').filter({ hasText: /^Value \(SEK\)$/ }).getByRole('spinbutton').fill('100');
-
-    // Click the checkbox with the class '.checkbox'
-    await page.locator('.checkbox').click();
-
+    await page.locator('div').filter({ hasText: /^Client- Not selected -Jonas Hellman \(#1\)Mikael Eriksson \(#2\)$/ }).getByRole('combobox').selectOption('2');
+    await page.locator('div').filter({ hasText: /^Room- Not selected -Floor 1, Room 101Floor 1, Room 102$/ }).getByRole('combobox').selectOption('2');
+    await page.locator('div').filter({ hasText: /^Bill- Not selected -ID: 1$/ }).getByRole('combobox').selectOption('1');
     await page.locator('a.btn.blue', { hasText: 'Save' }).click();
     await page.waitForTimeout(4000);
-    const linkBillss = page.getByRole('link', { name: 'Back' });
-    await linkBillss.click();
+    // await expect(page.locator('text="Mikael Eriksson: 2024-10-15 - 2024-10-20Booking ID: 2Start: 2024-10-15End: 2024"')).toBeVisible();
+    // Verifiera att en rubrik med specifik text är synlig
+    await expect(page.getByRole('heading', { name: 'Mikael Eriksson: 2024-10-15' })).toBeVisible();
+
+    const linkReservations = page.getByRole('link', { name: 'Back' });
+    await linkReservations.click();
     await page.waitForTimeout(2000);
-    await expect(page.locator('div').filter({ hasText: /^Paid: 1 \(100kr\)$/ })).toBeVisible();
+    // Verifiera att texten är synlig på sidan
+    await expect(page.getByText('ReservationsTotal: 2Current:')).toBeVisible();
     await page.locator('button', { hasText: 'Logout' }).click();
-    await page.waitForTimeout(2000);*/
+    await page.waitForTimeout(2000);
+
+
+  });
+
+
+  test('Test Case Edit Room', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
+    await loginPage.goto();
+    await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
+    await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
+    await page.waitForTimeout(2000);
+    const divWithText = page.locator('div').filter({ hasText: /^RoomsNumber: 2View$/ });
+
+    // Find the link within that div and click it
+    await divWithText.getByRole('link').click();
+    await expect(page.getByText('Rooms')).toBeVisible();
+    // Verifiera att texten "101" är synlig på sidan
+    await expect(page.getByText('101', { exact: true })).toBeVisible();
+    await expect(page.getByText('101 Floor 1, Room 101Category')).toBeVisible();
+    // Klicka på det första elementet med klassen 'action'
+    await page.locator('.action').first().click();
+    await page.getByText('Edit').click();
+    await page.locator('div').filter({ hasText: /^Number$/ }).getByRole('spinbutton').fill('110')
+    await page.waitForTimeout(2000);
+    await page.locator('a.btn.blue', { hasText: 'Save' }).click();
+    await expect(page.getByText('110', { exact: true })).toBeVisible();
+    await expect(page.getByText('110 Floor 1, Room 110Category')).toBeVisible();
+
+    await page.waitForTimeout(4000);
+    const linkEditRoom = page.getByRole('link', { name: 'Back' });
+    await linkEditRoom.click();
+    await page.waitForTimeout(2000);
+    await page.locator('button', { hasText: 'Logout' }).click();
+    await page.waitForTimeout(2000);
+
+
+
+  });
+  test('Test Case Delete Client', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
+    await loginPage.goto();
+    await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
+    await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
+    await page.waitForTimeout(2000);
+    const divWithClients = page.locator('div').filter({ hasText: /^ClientsNumber: 2View$/ });
+    await divWithClients.getByRole('link').click();
+    await page.waitForTimeout(2000);
+    await expect(page.getByText('Clients')).toBeVisible();
+    await expect(page.getByText('JH Jonas Hellman (#1)Email:')).toBeVisible();
+    await page.getByRole('img').first().click();
+    await page.getByText('Delete').click();
+    await page.waitForTimeout(2000);
+    const linkEditRoom = page.getByRole('link', { name: 'Back' });
+    await linkEditRoom.click();
+    await page.waitForTimeout(2000);
+    // Verifiera att texten 'ClientsNumber: 1View' är synlig på sidan
+    await expect(page.getByText('ClientsNumber: 1View')).toBeVisible();
+    await page.locator('button', { hasText: 'Logout' }).click();
+    await page.waitForTimeout(2000);
+
+
 
 
 
