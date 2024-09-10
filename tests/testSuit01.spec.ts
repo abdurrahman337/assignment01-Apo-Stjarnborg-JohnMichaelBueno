@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from './pages/login-page';
+import { CreateRoom } from './pages/Create-New-Room-Page';
 import { DashboardPage } from './pages/dashboard-page';
 import { faker } from '@faker-js/faker';
 
@@ -106,31 +107,16 @@ test.describe('Test suite 01', () => {
   test('Test Case Create Room ', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
+    const createRoompage = new CreateRoom(page);
+
     await loginPage.goto();
+    await createRoompage.goto();
     await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
     await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
     await page.waitForTimeout(2000);
-    // Locate the div containing the exact text 'RoomsNumber: 2View'
-    const divWithText = page.locator('div').filter({ hasText: /^RoomsNumber: 2View$/ });
-
-    // Find the link within that div and click it
-    await divWithText.getByRole('link').click();
-    await expect(page.getByText('Rooms')).toBeVisible();
-
-    await page.getByRole('link', { name: 'Create Room' }).click();
-    await page.waitForTimeout(2000);
-    await page.getByRole('combobox').click();
-    await page.selectOption('select', { value: 'single' });
-    await page.waitForTimeout(1000);
-    await page.locator('div').filter({ hasText: /^Number$/ }).getByRole('spinbutton').fill('3');
-    await page.locator('div').filter({ hasText: /^Floor$/ }).getByRole('spinbutton').fill('1');
-    // Click the checkbox with the class '.checkbox'
-    await page.locator('.checkbox').click();
-
-    await page.locator('div').filter({ hasText: /^Price$/ }).getByRole('spinbutton').fill('1250')
-
-    await page.getByRole('listbox').selectOption('balcony');
-
+    await dashboardPage.performdasboard();
+    const CreateRoomButton = page.getByRole('link', { name: 'Create Room' }).click();
+    await createRoompage.createRoom("3", "1", "1250", "balcony");
     await page.locator('a.btn.blue', { hasText: 'Save' }).click();
     await page.waitForTimeout(2000);
 

@@ -6,6 +6,10 @@ export class LoginPage {
     readonly usernameTextfield: Locator;
     readonly passwordTextfield: Locator;
     readonly loginButton: Locator;
+    readonly CreateRoomButton: Locator;
+
+
+
 
     //Const
     constructor(page: Page) {
@@ -13,6 +17,10 @@ export class LoginPage {
         this.usernameTextfield = page.locator('input[type="text"]');
         this.passwordTextfield = page.locator('input[type="password"]');
         this.loginButton = page.getByRole('button', { name: 'Login' });
+        this.usernameTextfield = page.locator('input[type="text"]');
+        this.passwordTextfield = page.locator('input[type="password"]');
+        this.CreateRoomButton = page.getByRole('button', { name: 'Create Room' });
+
     }
 
     // Methods / functions
@@ -24,5 +32,8 @@ export class LoginPage {
         await this.usernameTextfield.fill(username);
         await this.passwordTextfield.fill(password);
         await this.loginButton.click();
+        await this.CreateRoomButton.click();
+
+
     }
 }
