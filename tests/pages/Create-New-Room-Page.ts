@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-
+import { faker } from '@faker-js/faker';
 export class CreateRoom {
     // Attributes
     readonly page: Page;
@@ -35,12 +35,16 @@ export class CreateRoom {
 
     // CreateRoom method
     async createRoom(roomNumber: string, floorNumber: string, roomPrice: string, features: string,) {
+        // randomizes input data for a Room using Faker
+        roomNumber = faker.number.int({max: 100}).toString(); 
+        floorNumber = faker.number.int({min: 1, max: 5}).toString();
+        roomPrice = faker.number.int({ min: 500, max: 5000}).toString(); 
         // Select 'Double' option in the combobox
         await this.CategorySelect.selectOption({ index: 0 });
-        await this.Room.fill("103");
-        await this.Floor.fill("2");
-        await this.Available.check(); 
-        await this.Price.fill("1250");
+        await this.Room.fill(roomNumber);
+        await this.Floor.fill(floorNumber);
+        //await this.Available.check(); 
+        await this.Price.fill(roomPrice);
 
         // Select features before saving
         await this.Features.selectOption({ index: 0 });
