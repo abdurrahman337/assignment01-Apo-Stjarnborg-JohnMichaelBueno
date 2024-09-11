@@ -5,6 +5,7 @@ export class DashboardPage {
     readonly page: Page;
     readonly logoutButton: Locator;
     readonly ViewRoomButton: Locator;
+    readonly ViewClientButton: Locator;
 
 
     constructor(page: Page) {
@@ -13,6 +14,10 @@ export class DashboardPage {
         this.ViewRoomButton = page
             .locator('div', { hasText: /^RoomsNumber: 2View$/ }) // Locate div containing the text
             .getByRole('link'); // Then find the link within that div
+        
+        this.ViewClientButton = page.
+            locator('div', { hasText: /^ClientsNumber: 2View$/ })
+            .getByRole('link');
 
 
     }
@@ -25,6 +30,9 @@ export class DashboardPage {
     async performdasboard() {
         await this.ViewRoomButton.click();
 
+    }
+    async performOpenClient(){
+        await this.ViewClientButton.click();
     }
 
 

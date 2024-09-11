@@ -3,6 +3,8 @@ import { LoginPage } from './pages/login-page';
 import { CreateRoom } from './pages/Create-New-Room-Page';
 import { DashboardPage } from './pages/dashboard-page';
 import { faker } from '@faker-js/faker';
+import { CreateClientPage } from './pages/Create-New-Client-Page';
+import { ListClientsPage} from './pages/List-Clients-Page';
 
 const randomName = faker.person.firstName();
 const randomPassword = faker.internet.password();
@@ -133,23 +135,29 @@ test.describe('Test suite 01', () => {
   test('Test Case Create Clients ', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
+    const createClient = new CreateClientPage(page);
+    const listClientsPage = new ListClientsPage(page);
     await loginPage.goto();
     await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
     await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
     await page.waitForTimeout(2000);
 
+    await dashboardPage.performOpenClient();
+    await listClientsPage.performLogin();
+    await createClient.createClient("","","");
+/*
     const divWithClients = page.locator('div').filter({ hasText: /^ClientsNumber: 2View$/ });
     await divWithClients.getByRole('link').click();
     await page.waitForTimeout(2000);
     await expect(page.getByText('Clients')).toBeVisible();
-
-    await page.getByRole('link', { name: 'Create Client' }).click();
+*/
+/*  await page.getByRole('link', { name: 'Create Client' }).click();
     await page.waitForTimeout(2000);
     await expect(page.getByText('New Client')).toBeVisible();
     await page.locator('div').filter({ hasText: /^Name$/ }).getByRole('textbox').fill('Alex')
     await page.locator('input[type="email"]').fill('alex@hotmail.se');
     await page.locator('div').filter({ hasText: /^Telephone$/ }).getByRole('textbox').fill('073758585858')
-
+*/
     await page.locator('a.btn.blue', { hasText: 'Save' }).click();
     await page.waitForTimeout(2000);
     const linkReservation = page.getByRole('link', { name: 'Back' });
@@ -157,12 +165,13 @@ test.describe('Test suite 01', () => {
     await page.waitForTimeout(2000);
     await expect(page.getByText('Number: 3')).toBeVisible();
     await page.locator('button', { hasText: 'Logout' }).click();
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(2000); 
+
 
 
   });
 
-  //Create Client
+  //Create unsuccessful Client
   test('Test Case Unsuccessful Create Clients ', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
