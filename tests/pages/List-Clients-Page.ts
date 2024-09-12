@@ -1,39 +1,38 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
 export class ListClientsPage {
-    //Attributes
-    /*readonly page: Page;
-    readonly usernameTextfield: Locator;
-    readonly passwordTextfield: Locator;
-    readonly loginButton: Locator;*/
+
     readonly CreateClientButton: Locator;
+    readonly page: Page;  // Declare the page attribute
+    readonly editClientButton: Locator;
+    readonly ActionEdit: Locator;
 
-
-
-
-    //Const
+    // Constructor
     constructor(page: Page) {
         this.page = page;
-        /*this.usernameTextfield = page.locator('input[type="text"]');
-        this.passwordTextfield = page.locator('input[type="password"]');
-        this.loginButton = page.getByRole('button', { name: 'Login' });
-        this.usernameTextfield = page.locator('input[type="text"]');
-        this.passwordTextfield = page.locator('input[type="password"]');*/
         this.CreateClientButton = page.getByRole('link', { name: 'Create Client' });
+        this.editClientButton
+        this.ActionEdit = page.locator('.action')
 
     }
 
-    // Methods / functions
+    // Navigate to the base URL
     async goto() {
         await this.page.goto(`${process.env.BASE_URL}`);
     }
-    async performLogin(/*username: string, password: string*/) {
-        //fill out the form - 2 textfields and click the submit button
-        //await this.usernameTextfield.fill(username);
-        //await this.passwordTextfield.fill(password);
-       // await this.loginButton.click();
+
+    // Click the "Create Client" button
+    async clickCreateClientButton() {
+        // Ensure the "Create Client" button is visible before clicking
+        await expect(this.CreateClientButton).toBeVisible();
         await this.CreateClientButton.click();
+    }
 
 
+    async editClient() {
+        await this.page.locator('.action').first().click();
+        await this.page.locator('#app > div > div.clients > div > div.menu > a:nth-child(1)').click();
+        //await expect(this.headingLocator).not.toBeVisible();
+        await this.page.locator('div').filter({ hasText: /^Name$/ }).getByRole('textbox').fill("John")
     }
 }

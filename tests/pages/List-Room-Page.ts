@@ -31,6 +31,7 @@ export class ListRoomPage {
     }
 
     async performLogin(username: string, password: string) {
+        // Fill out the form and click the login button
         await this.usernameTextfield.fill(username);
         await this.passwordTextfield.fill(password);
         await this.loginButton.click();

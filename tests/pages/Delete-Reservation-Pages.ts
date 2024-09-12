@@ -27,8 +27,7 @@ export class DeleteReservationPage {
 
     // CreateReservation method
     async deleteReservation() {
-        // Fill in the start and end dates (use dynamic or default dates
-        // await this.ActionDelete.selectOption({ index: 1 }); // Adjust index as needed
+
         await this.page.locator('.action').click();
         await this.page.locator('#app > div > div.reservations > div > div.menu > a:nth-child(2)').click();
         await expect(this.headingLocator).not.toBeVisible();
