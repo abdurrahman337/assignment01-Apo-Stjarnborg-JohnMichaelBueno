@@ -17,7 +17,6 @@ export class DeleteReservationPage {
         this.DropdownOptions = page.locator('.dropdown-menu a');  // Locator for the dropdown options
         this.headingLocator = page.locator('role=heading[name="Jonas Hellman: 2020-04-01 -"]');
 
-
     }
 
     // Methods
