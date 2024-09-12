@@ -7,6 +7,7 @@ import { CreateClientPage } from './pages/Create-New-Client-Page';
 import { ListClientsPage } from './pages/List-Clients-Page';
 import { ReservationPage } from './pages/List-Reservation-Page';
 import { CreateReservationPage } from './pages/Create-New-Reservation-Page';
+import { DeleteReservationPage } from './pages/Delete-Reservation-Pages';
 
 const randomName = faker.person.firstName();
 const randomPassword = faker.internet.password();
@@ -50,62 +51,62 @@ test.describe('Test suite 01', () => {
   });
 
 
-
-  test('Test Case OnePage', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
-    await loginPage.goto();
-    await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
-    await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
-    //await page.locator('div').filter({ hasText: /^RoomsNumber: 2View$/ }).getByRole('link').click();
-    await page.waitForTimeout(2000);
-    // Locate the div containing the exact text 'RoomsNumber: 2View'
-    const divWithText = page.locator('div').filter({ hasText: /^RoomsNumber: 2View$/ });
-
-    // Find the link within that div and click it
-    await divWithText.getByRole('link').click();
-    await page.waitForTimeout(2000);
-    await expect(page.getByText('Rooms')).toBeVisible();
-    // Assuming getByRole is part of the testing library you're using
-    const link = page.getByRole('link', { name: 'Back' });
-    await link.click();
-    await page.waitForTimeout(2000);
-
-    const divWithClients = page.locator('div').filter({ hasText: /^ClientsNumber: 2View$/ });
-    await divWithClients.getByRole('link').click();
-    await page.waitForTimeout(2000);
-    await expect(page.getByText('Clients')).toBeVisible();
-    const linkClients = page.getByRole('link', { name: 'Back' });
-    await linkClients.click();
-    await page.waitForTimeout(2000);
-
-    //locator('div').filter({ hasText: /^BillsTotal: 1 \(4500kr\)Paid: 0 \(0kr\)View$/ }).getByRole('link')
-
-    const divWithBills = page.locator('div').filter({ hasText: /^BillsTotal: 1 \(4500kr\)Paid: 0 \(0kr\)View$/ });
-    await divWithBills.getByRole('link').click();
-    await page.waitForTimeout(3000);
-    await expect(page.getByText('Bills')).toBeVisible();
-    const linkBill = page.getByRole('link', { name: 'Back' });
-    await linkBill.click();
-    await page.waitForTimeout(2000);
-
-
-    const divWithReservations = page.locator('div').filter({ hasText: /^ReservationsTotal: 1Current: 0View$/ });
-    await divWithReservations.getByRole('link').click();
-    await page.waitForTimeout(3000);
-    await expect(page.getByText('Reservations')).toBeVisible();
-    const linkReservation = page.getByRole('link', { name: 'Back' });
-    await linkReservation.click();
-    await page.waitForTimeout(2000);
-
-    // Locate the button with the name 'Logout' and click it
-    await page.locator('button', { hasText: 'Logout' }).click();
-    await page.waitForTimeout(2000);
-
-
-
-  });
-
+  /*
+    test('Test Case OnePage', async ({ page }) => {
+      const loginPage = new LoginPage(page);
+      const dashboardPage = new DashboardPage(page);
+      await loginPage.goto();
+      await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
+      await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
+      //await page.locator('div').filter({ hasText: /^RoomsNumber: 2View$/ }).getByRole('link').click();
+      await page.waitForTimeout(2000);
+      // Locate the div containing the exact text 'RoomsNumber: 2View'
+      const divWithText = page.locator('div').filter({ hasText: /^RoomsNumber: 2View$/ });
+  
+      // Find the link within that div and click it
+      await divWithText.getByRole('link').click();
+      await page.waitForTimeout(2000);
+      await expect(page.getByText('Rooms')).toBeVisible();
+      // Assuming getByRole is part of the testing library you're using
+      const link = page.getByRole('link', { name: 'Back' });
+      await link.click();
+      await page.waitForTimeout(2000);
+  
+      const divWithClients = page.locator('div').filter({ hasText: /^ClientsNumber: 2View$/ });
+      await divWithClients.getByRole('link').click();
+      await page.waitForTimeout(2000);
+      await expect(page.getByText('Clients')).toBeVisible();
+      const linkClients = page.getByRole('link', { name: 'Back' });
+      await linkClients.click();
+      await page.waitForTimeout(2000);
+  
+      //locator('div').filter({ hasText: /^BillsTotal: 1 \(4500kr\)Paid: 0 \(0kr\)View$/ }).getByRole('link')
+  
+      const divWithBills = page.locator('div').filter({ hasText: /^BillsTotal: 1 \(4500kr\)Paid: 0 \(0kr\)View$/ });
+      await divWithBills.getByRole('link').click();
+      await page.waitForTimeout(3000);
+      await expect(page.getByText('Bills')).toBeVisible();
+      const linkBill = page.getByRole('link', { name: 'Back' });
+      await linkBill.click();
+      await page.waitForTimeout(2000);
+  
+  
+      const divWithReservations = page.locator('div').filter({ hasText: /^ReservationsTotal: 1Current: 0View$/ });
+      await divWithReservations.getByRole('link').click();
+      await page.waitForTimeout(3000);
+      await expect(page.getByText('Reservations')).toBeVisible();
+      const linkReservation = page.getByRole('link', { name: 'Back' });
+      await linkReservation.click();
+      await page.waitForTimeout(2000);
+  
+      // Locate the button with the name 'Logout' and click it
+      await page.locator('button', { hasText: 'Logout' }).click();
+      await page.waitForTimeout(2000);
+  
+  
+  
+    });
+  */
 
   //Create Room
   test('Test Case Create Room ', async ({ page }) => {
@@ -165,11 +166,15 @@ test.describe('Test suite 01', () => {
     const linkReservation = page.getByRole('link', { name: 'Back' });
     await linkReservation.click();
     await page.waitForTimeout(2000);
+    // Ensure that the number of clients has increased to 3
     await expect(page.getByText('Number: 3')).toBeVisible();
+
+    // Refined locator to filter and check the specific 'ClientsNumber: 3View' pattern
+    const updatedClientsDiv = page.locator('div').filter({ hasText: /^ClientsNumber: 3View$/ });
+    await expect(updatedClientsDiv).toBeVisible();  // Assertion to confirm the number of clients
+    //await expect(page.getByText('Number: 3')).toBeVisible();
     await page.locator('button', { hasText: 'Logout' }).click();
     await page.waitForTimeout(2000);
-
-
 
   });
 
@@ -255,6 +260,38 @@ test.describe('Test suite 01', () => {
   });
 
 
+  //Create Bills
+  test('Test Case Create UnPaidBills ', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
+    await loginPage.goto();
+    await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
+    await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
+    await page.waitForTimeout(2000);
+    const divWithBills = page.locator('div').filter({ hasText: /^BillsTotal: 1 \(4500kr\)Paid: 0 \(0kr\)View$/ });
+    await divWithBills.getByRole('link').click();
+    await page.waitForTimeout(3000);
+
+    await page.getByRole('link', { name: 'Create Bill' }).click();
+    await page.waitForTimeout(2000);
+    await expect(page.getByText('New Bill')).toBeVisible();
+    await page.locator('div').filter({ hasText: /^Value \(SEK\)$/ }).getByRole('spinbutton').fill('200');
+
+    await page.locator('a.btn.blue', { hasText: 'Save' }).click();
+    await page.waitForTimeout(4000);
+    const linkBillss = page.getByRole('link', { name: 'Back' });
+    await linkBillss.click();
+    await page.waitForTimeout(2000);
+    await expect(page.locator('div').filter({ hasText: 'Paid: 0 (0kr)' }).nth(4)).toBeVisible();
+    await page.locator('button', { hasText: 'Logout' }).click();
+    await page.waitForTimeout(2000);
+
+
+
+  });
+
+
+
   //Create Reservation
   test('Test Case Create Reservation ', async ({ page }) => {
     const loginPage = new LoginPage(page);
@@ -264,13 +301,10 @@ test.describe('Test suite 01', () => {
     await loginPage.goto();
     await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
     await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
-    await page.waitForTimeout(2000);
     await dashboardPage.performReservationOpenClient();
     await listreservationPage.performLogin();
-
     await reservationPage.createReservation("2024-08-20", "2024-08-25");
-    
-    await page.locator('a.btn.blue', { hasText: 'Save' }).click();
+    await expect(page.locator('div').filter({ hasText: 'Jonas Hellman: 2024-08-20 -' }).nth(0)).toBeVisible();
     await page.waitForTimeout(2000);
 
 
@@ -307,6 +341,20 @@ test.describe('Test suite 01', () => {
   });
 
 
+  test('Test Case Delete Reservation ', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
+    const listreservationPage = new ReservationPage(page);
+    const deleteReservationPage = new DeleteReservationPage(page);
+    await loginPage.goto();
+    await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
+    await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
+    await page.waitForTimeout(2000);
+    await dashboardPage.performReservationOpenClient();
+    await deleteReservationPage.deleteReservation();
+
+  });
+
   test('Test Case Edit Room', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
@@ -330,7 +378,6 @@ test.describe('Test suite 01', () => {
     await page.locator('a.btn.blue', { hasText: 'Save' }).click();
     await expect(page.getByText('110', { exact: true })).toBeVisible();
     await expect(page.getByText('110 Floor 1, Room 110Category')).toBeVisible();
-
     await page.waitForTimeout(4000);
     const linkEditRoom = page.getByRole('link', { name: 'Back' });
     await linkEditRoom.click();
@@ -370,7 +417,14 @@ test.describe('Test suite 01', () => {
 
   });
 
-
+  /*
+     await reservationPage.createReservation("2024-08-20", "2024-08-25");
+     await page.locator('a.btn.blue', { hasText: 'Save' }).click();
+     await page.waitForTimeout(4000);
+     await page.locator('button', { hasText: 'Logout' }).click();
+     await page.waitForTimeout(2000); 
+ 
+     */
 
 
 

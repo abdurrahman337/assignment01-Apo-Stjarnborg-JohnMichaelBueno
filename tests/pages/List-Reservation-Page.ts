@@ -5,14 +5,14 @@ export class ReservationPage {
     readonly page: Page;
 
     readonly CreateReservationButton: Locator;
-    // readonly backButton: Locator;
+    readonly backButton: Locator;
 
 
     //Const
     constructor(page: Page) {
         this.page = page;
         this.CreateReservationButton = page.getByRole('link', { name: 'Create Reservation' });
-        // this.backButton = page.getByRole('button', { name: 'Back' });
+        this.backButton = page.getByRole('button', { name: 'Back' });
 
     }
 
@@ -23,9 +23,18 @@ export class ReservationPage {
     async performLogin() {
 
         await this.CreateReservationButton.click();
-        // await this.backButton.click();
 
 
 
     }
+
+    async performBackToList() {
+
+        await this.backButton.click();
+
+
+
+    }
+
+
 }
