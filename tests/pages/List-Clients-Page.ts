@@ -8,22 +8,27 @@ export class ListClientsPage {
     readonly ActionEdit: Locator;
     readonly headingLocator: Locator;
     readonly BackButton: Locator;
+    readonly SaveButton: Locator;
+    readonly ClientsName: Locator;
+    readonly DeleteButton: Locator;
+    readonly ActionDelete: Locator;
+
+
+
 
     // Constructor
     constructor(page: Page) {
         this.page = page;
         this.CreateClientButton = page.getByRole('link', { name: 'Create Client' });
-        this.editClientButton
-        this.ActionEdit = page.locator('.action')
+        this.editClientButton = page.locator('#app > div > div.clients > div > div.menu > a:nth-child(1)');
+        this.ActionEdit = page.locator('.action').first();
         this.headingLocator = page.locator('role=heading[name="Mikael Eriksson: 2020-04-01 -"]');
+        this.ClientsName = page.locator('div').filter({ hasText: /^Name$/ }).getByRole('textbox');
         this.BackButton = page.getByRole('link', { name: 'Back' });
+        this.SaveButton = page.locator('a.btn.blue', { hasText: 'Save' });
+        this.DeleteButton = page.locator('#app > div > div.clients > div > div.menu > a:nth-child(2)');
+        this.ActionDelete = page.locator('.action').nth(1);
 
-
-    }
-
-    // Navigate to the base URL
-    async goto() {
-        await this.page.goto(`${process.env.BASE_URL}`);
     }
 
     // Click the "Create Client" button
@@ -35,18 +40,19 @@ export class ListClientsPage {
 
 
     async editClient() {
-        await this.page.locator('.action').first().click();
-        await this.page.locator('#app > div > div.clients > div > div.menu > a:nth-child(1)').click();
-        //await expect(this.headingLocator).not.toBeVisible();
-        await this.page.locator('div').filter({ hasText: /^Name$/ }).getByRole('textbox').fill("John")
+        await this.ActionEdit.click();
+        await this.editClientButton.click();
+        await this.ClientsName.fill("John")
+        await this.SaveButton.click();
+
     }
 
 
     // CreateReservation method
     async deleteClients() {
 
-        await this.page.locator('.action').nth(1).click();
-        await this.page.locator('#app > div > div.clients > div > div.menu > a:nth-child(2)').click();
+        await this.ActionDelete.click();
+        await this.DeleteButton.click();
         await expect(this.headingLocator).not.toBeVisible();
 
     }
@@ -54,8 +60,6 @@ export class ListClientsPage {
     async performBackToList() {
 
         await this.BackButton.click();
-
-
 
     }
 }

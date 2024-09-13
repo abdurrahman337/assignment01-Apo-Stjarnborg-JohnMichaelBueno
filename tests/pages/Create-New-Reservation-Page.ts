@@ -10,6 +10,9 @@ export class CreateReservationPage {
     readonly Room: Locator;
     readonly Bill: Locator;
     readonly SaveReservationButton: Locator;
+    readonly ActionDelete: Locator;
+    readonly DropdownOptions: Locator;
+    readonly headingLocator: Locator;
 
     // Constructor
     constructor(page: Page) {
@@ -20,28 +23,30 @@ export class CreateReservationPage {
         this.Room = page.locator('div').filter({ hasText: /^Room- Not selected -Floor 1, Room 101Floor 1, Room 102$/ }).getByRole('combobox');
         this.Bill = page.locator('div').filter({ hasText: /^Bill- Not selected -ID: 1$/ }).getByRole('combobox');
         this.SaveReservationButton = page.locator('a.btn.blue', { hasText: 'Save' });
+        this.ActionDelete = page.locator('.action');
+        this.DropdownOptions = page.locator(('#app > div > div.reservations > div > div.menu > a:nth-child(2)'));
+        this.headingLocator = page.locator('role=heading[name="Jonas Hellman: 2020-04-01 -"]');
 
 
     }
 
-    // Methods
-    async goto() {
-        // Navigate to the base URL (ensure BASE_URL is set in environment variables)
-        await this.page.goto(`${process.env.BASE_URL}`);
-    }
+
 
     // CreateReservation method
     async createReservation(startDate: string = "2024-08-25", endDate: string = "2024-08-28") {
-        // Fill in the start and end dates (use dynamic or default dates)
         await this.StartDate.fill(startDate);
         await this.EndDate.fill(endDate);
-
-        // Select client, room, and bill options by index
         await this.Client.selectOption({ index: 1 });
         await this.Room.selectOption({ index: 1 });
         await this.Bill.selectOption({ index: 1 });
-
-        // Click the Save button to submit the reservation
         await this.SaveReservationButton.click();
+    }
+
+
+    // DeleteReservation method
+    async deleteReservation() {
+        await this.ActionDelete.click();
+        await this.DropdownOptions.click();
+        await expect(this.headingLocator).not.toBeVisible();
     }
 }

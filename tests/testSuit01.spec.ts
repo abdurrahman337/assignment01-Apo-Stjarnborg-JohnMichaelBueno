@@ -7,7 +7,6 @@ import { CreateClientPage } from './pages/Create-New-Client-Page';
 import { ListClientsPage } from './pages/List-Clients-Page';
 import { ReservationPage } from './pages/List-Reservation-Page';
 import { CreateReservationPage } from './pages/Create-New-Reservation-Page';
-import { DeleteReservationPage } from './pages/Delete-Reservation-Pages';
 import { ListRoomPage } from './pages/List-Room-Page';
 import { BillsPage } from './pages/List-Bills-Page';
 import { CreateBillPage } from './pages/Create-New-Bills.Page';
@@ -36,7 +35,6 @@ test.describe('Test suite 01', () => {
     const createRoompage = new CreateRoom(page);
     const listRoomPage = new ListRoomPage(page);
     await loginPage.goto();
-    await createRoompage.goto();
     await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
     await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
     await page.waitForTimeout(2000);
@@ -78,29 +76,16 @@ test.describe('Test suite 01', () => {
   test('Test Case Create Bills ', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
-    const linkBillss = page.getByRole('link', { name: 'Back' });
     const listBills = new BillsPage(page);
     const createBill = new CreateBillPage(page)
     await loginPage.goto();
     await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
     await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
-    await page.waitForTimeout(2000);
-    
-
-    /*
-    const divWithBills = page.locator('div').filter({ hasText: /^BillsTotal: 1 \(4500kr\)Paid: 0 \(0kr\)View$/ });
-    await divWithBills.getByRole('link').click();
-    await page.waitForTimeout(3000);
-    await page.getByRole('link', { name: 'Create Bill' }).click();
-    await page.waitForTimeout(2000);
-    await expect(page.getByText('New Bill')).toBeVisible();
-    await page.locator('div').filter({ hasText: /^Value \(SEK\)$/ }).getByRole('spinbutton').fill('100');
-    await page.locator('a.btn.blue', { hasText: 'Save' }).click();
-    await page.waitForTimeout(4000);
-    await linkBillss.click();
-    await page.waitForTimeout(2000);
-    await expect(page.locator('div').filter({ hasText: /^Paid: 1 \(100kr\)$/ })).toBeVisible();
-    await page.locator('button', { hasText: 'Logout' }).click();*/
+    await dashboardPage.performOpenBills();
+    await listBills.createBills();
+    await createBill.createBill();
+    await listBills.performBackToList();
+    await expect(page.locator('div').filter({ hasText: /^Paid: 1 \(850kr\)$/ })).toBeVisible();
     await page.waitForTimeout(2000);
 
 
@@ -108,33 +93,21 @@ test.describe('Test suite 01', () => {
   });
 
 
-  //Create Bills
+  //Create UnPaidBills
   test('Test Case Create UnPaidBills ', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
+    const listBills = new BillsPage(page);
+    const createBill = new CreateBillPage(page)
     await loginPage.goto();
     await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
     await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
-    await page.waitForTimeout(2000);
-    const divWithBills = page.locator('div').filter({ hasText: /^BillsTotal: 1 \(4500kr\)Paid: 0 \(0kr\)View$/ });
-    await divWithBills.getByRole('link').click();
-    await page.waitForTimeout(3000);
-
-    await page.getByRole('link', { name: 'Create Bill' }).click();
-    await page.waitForTimeout(2000);
-    await expect(page.getByText('New Bill')).toBeVisible();
-    await page.locator('div').filter({ hasText: /^Value \(SEK\)$/ }).getByRole('spinbutton').fill('200');
-
-    await page.locator('a.btn.blue', { hasText: 'Save' }).click();
-    await page.waitForTimeout(4000);
-    const linkBillss = page.getByRole('link', { name: 'Back' });
-    await linkBillss.click();
-    await page.waitForTimeout(2000);
+    await dashboardPage.performOpenBills();
+    await listBills.createBills();
+    await createBill.createUnPaidBill();
+    await listBills.performBackToList();
     await expect(page.locator('div').filter({ hasText: 'Paid: 0 (0kr)' }).nth(4)).toBeVisible();
-    await page.locator('button', { hasText: 'Logout' }).click();
     await page.waitForTimeout(2000);
-
-
 
   });
 
@@ -164,13 +137,13 @@ test.describe('Test suite 01', () => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
     const listreservationPage = new ReservationPage(page);
-    const deleteReservationPage = new DeleteReservationPage(page);
+    const createReservation = new CreateReservationPage(page);
     await loginPage.goto();
     await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
     await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
     await page.waitForTimeout(2000);
     await dashboardPage.performReservationOpenClient();
-    await deleteReservationPage.deleteReservation();
+    await createReservation.deleteReservation();
 
   });
 
@@ -181,13 +154,11 @@ test.describe('Test suite 01', () => {
     const createRoompage = new CreateRoom(page);
     const listRoomPage = new ListRoomPage(page);
     await loginPage.goto();
-    await createRoompage.goto();
     await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
     await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
     await page.waitForTimeout(2000);
     await dashboardPage.performOpenRoom();
     await listRoomPage.editButton();
-    await page.locator('a.btn.blue', { hasText: 'Save' }).click();
     await page.waitForTimeout(3000);
 
   });
@@ -205,7 +176,6 @@ test.describe('Test suite 01', () => {
     await page.waitForTimeout(2000);
     await dashboardPage.performOpenClient();
     await listClientPage.editClient();
-    await page.locator('a.btn.blue', { hasText: 'Save' }).click();
     await page.waitForTimeout(3000);
 
   });

@@ -18,16 +18,17 @@ export class CreateBillPage {
         this.BackBillListButton = page.getByText('Back');
     }
 
-    // Methods / functions
-    async goto() {
-        await this.page.goto(`${process.env.BASE_URL}`);
-    }
-
-    // CreateRoom method
-    async createBill(billValue) {
-        billValue = faker.number.int({ min: 800, max: 2500 })
-        await this.BillValue.fill(billValue);
+    // CreateBill method
+    async createBill() {
+        await this.BillValue.fill("850");
         await this.Checkbox.click();
+        await this.SaveBillButton.click();
+
+
+    }
+    // CreateUnPaidBill
+    async createUnPaidBill() {
+        await this.BillValue.fill("900");
         await this.SaveBillButton.click();
 
 

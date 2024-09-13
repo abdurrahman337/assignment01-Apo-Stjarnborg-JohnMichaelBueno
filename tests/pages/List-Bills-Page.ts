@@ -20,7 +20,7 @@ export class BillsPage {
     async goto() {
         await this.page.goto(`${process.env.BASE_URL}`);
     }
-    async performLogin() {
+    async createBills() {
 
         await this.CreateBillButton.click();
 

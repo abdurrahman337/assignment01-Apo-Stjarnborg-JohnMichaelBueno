@@ -20,13 +20,7 @@ export class CreateRoom {
         this.Available = page.locator('.checkbox')
         this.Price = page.locator('div').filter({ hasText: /^Price$/ }).getByRole('spinbutton')
         this.Features = page.getByRole('listbox');
-
         this.SaveRoomButton = page.locator('a.btn.blue', { hasText: 'Save' });
-    }
-
-    // Methods / functions
-    async goto() {
-        await this.page.goto(`${process.env.BASE_URL}`);
     }
 
     // CreateRoom method
