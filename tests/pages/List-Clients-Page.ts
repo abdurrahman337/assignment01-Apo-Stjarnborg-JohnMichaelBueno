@@ -6,6 +6,8 @@ export class ListClientsPage {
     readonly page: Page;  // Declare the page attribute
     readonly editClientButton: Locator;
     readonly ActionEdit: Locator;
+    readonly headingLocator: Locator;
+    readonly BackButton: Locator;
 
     // Constructor
     constructor(page: Page) {
@@ -13,6 +15,9 @@ export class ListClientsPage {
         this.CreateClientButton = page.getByRole('link', { name: 'Create Client' });
         this.editClientButton
         this.ActionEdit = page.locator('.action')
+        this.headingLocator = page.locator('role=heading[name="Mikael Eriksson: 2020-04-01 -"]');
+        this.BackButton = page.getByRole('link', { name: 'Back' });
+
 
     }
 
@@ -35,4 +40,23 @@ export class ListClientsPage {
         //await expect(this.headingLocator).not.toBeVisible();
         await this.page.locator('div').filter({ hasText: /^Name$/ }).getByRole('textbox').fill("John")
     }
+
+
+    // CreateReservation method
+    async deleteClients() {
+
+        await this.page.locator('.action').nth(1).click();
+        await this.page.locator('#app > div > div.clients > div > div.menu > a:nth-child(2)').click();
+        await expect(this.headingLocator).not.toBeVisible();
+
+    }
+
+    async performBackToList() {
+
+        await this.BackButton.click();
+
+
+
+    }
 }
+

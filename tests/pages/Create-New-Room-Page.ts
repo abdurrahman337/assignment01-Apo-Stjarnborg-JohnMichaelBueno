@@ -21,7 +21,7 @@ export class CreateRoom {
         this.Price = page.locator('div').filter({ hasText: /^Price$/ }).getByRole('spinbutton')
         this.Features = page.getByRole('listbox');
 
-        this.SaveRoomButton = page.getByRole('button', { name: 'Save' });
+        this.SaveRoomButton = page.locator('a.btn.blue', { hasText: 'Save' });
     }
 
     // Methods / functions
@@ -40,7 +40,7 @@ export class CreateRoom {
         await this.Floor.fill(floorNumber);
         await this.Price.fill(roomPrice);
         await this.Features.selectOption({ index: 0 });
-        await this.SaveRoomButton.click
+        await this.SaveRoomButton.click();
     }
 }
 

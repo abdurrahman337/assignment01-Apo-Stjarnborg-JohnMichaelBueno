@@ -7,7 +7,7 @@ export class CreateClientPage {
     readonly Email: Locator;
     readonly Telephone: Locator;
     readonly SaveClientButton: Locator;
-   
+
 
     // Constructor
     constructor(page: Page) {
@@ -17,9 +17,7 @@ export class CreateClientPage {
         this.Email = page.locator('input[type="email"]');
         //this.Floor = page.locator('input[name="floor"]'); // Assume floor input
         this.Telephone = page.locator('div').filter({ hasText: /^Telephone$/ }).getByRole('textbox');
-       
-
-        this.SaveClientButton = page.getByRole('button', { name: 'Save' });
+        this.SaveClientButton = page.getByText('Save');
     }
 
     // Methods / functions
@@ -30,16 +28,15 @@ export class CreateClientPage {
     // CreateRoom method
     async createClient(clientName: string, clientEmail: string, clientTelephone: string) {
         // randomizes input data for a client using Faker
-       clientName = faker.person.fullName();
-       clientEmail = faker.internet.email();
-       clientTelephone = faker.phone.number();
-    
+        clientName = faker.person.fullName();
+        clientEmail = faker.internet.email();
+        clientTelephone = faker.phone.number();
+
         // Select 'Double' option in the combobox
         await this.ClientName.fill(clientName);
         await this.Email.fill(clientEmail);
         await this.Telephone.fill(clientTelephone);
-
         // Save the room
-        await this.SaveClientButton.click
+        await this.SaveClientButton.click();
     }
 }

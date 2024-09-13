@@ -4,25 +4,22 @@ import { CreateRoom } from './Create-New-Room-Page';
 export class ListRoomPage {
     // Attributes
     readonly page: Page;
-    readonly usernameTextfield: Locator;
-    readonly passwordTextfield: Locator;
-    readonly loginButton: Locator;
     readonly createRoomButton: Locator;
     readonly editRoomButton: Locator;
     readonly ActionEdit: Locator;
     readonly Price: Locator;
     readonly SaveRoomButton: Locator;
+    readonly BackButton: Locator;
 
     // Constructor
     constructor(page: Page) {
         this.page = page;
-        this.usernameTextfield = page.locator('input[type="text"]');
-        this.passwordTextfield = page.locator('input[type="password"]');
-        this.loginButton = page.getByRole('button', { name: 'Login' });
-        this.createRoomButton = page.getByRole('button', { name: 'Create Room' });
+        this.createRoomButton = page.getByRole('link', { name: 'Create Room' });
         this.ActionEdit = page.locator('.action');
         this.Price = page.locator('div').filter({ hasText: /^Price$/ }).getByRole('spinbutton');
         this.SaveRoomButton = page.getByRole('button', { name: 'Save' });  // Initialize Save button
+        this.BackButton = page.getByRole('link', { name: 'Back' });
+
     }
 
     // Methods
@@ -30,12 +27,9 @@ export class ListRoomPage {
         await this.page.goto(`${process.env.BASE_URL}`);
     }
 
-    async performLogin(username: string, password: string) {
+    async listRoom() {
         // Fill out the form and click the login button
-        await this.usernameTextfield.fill(username);
-        await this.passwordTextfield.fill(password);
-        await this.loginButton.click();
-        await expect(this.createRoomButton).toBeVisible();
+        //await expect(this.createRoomButton).toBeVisible();
         await this.createRoomButton.click();
     }
 
@@ -47,6 +41,14 @@ export class ListRoomPage {
         await this.page.waitForTimeout(4000); // Adjust as needed
         const editRoom = new CreateRoom(this.page);
         await editRoom.createRoom("", "", "", "");
+
+    }
+
+    async performBackToList() {
+
+        await this.BackButton.click();
+
+
 
     }
 }
