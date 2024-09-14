@@ -1,38 +1,53 @@
 import { expect, type Locator, type Page } from '@playwright/test';
+import { CreateRoom } from './Create-New-Room-Page';
 
-export class LoginPage {
-    //Attributes
+export class ListRoomPage {
+    // Attributes
     readonly page: Page;
-    readonly usernameTextfield: Locator;
-    readonly passwordTextfield: Locator;
-    readonly loginButton: Locator;
-    readonly CreateRoomButton: Locator;
+    readonly createRoomButton: Locator;
+    readonly editRoomButton: Locator;
+    readonly ActionEdit: Locator;
+    readonly Price: Locator;
+    readonly SaveRoomButton: Locator;
+    readonly BackButton: Locator;
 
-
-
-
-    //Const
+    // Constructor
     constructor(page: Page) {
         this.page = page;
-        this.usernameTextfield = page.locator('input[type="text"]');
-        this.passwordTextfield = page.locator('input[type="password"]');
-        this.loginButton = page.getByRole('button', { name: 'Login' });
-        this.usernameTextfield = page.locator('input[type="text"]');
-        this.passwordTextfield = page.locator('input[type="password"]');
-        this.CreateRoomButton = page.getByRole('button', { name: 'Create Room' });
+        this.createRoomButton = page.getByRole('link', { name: 'Create Room' });
+        this.ActionEdit = page.locator('.action');
+        this.Price = page.locator('div').filter({ hasText: /^Price$/ }).getByRole('spinbutton');
+        this.SaveRoomButton = page.getByRole('button', { name: 'Save' });  // Initialize Save button
+        this.BackButton = page.getByRole('link', { name: 'Back' });
 
     }
 
-    // Methods / functions
+    // Methods
     async goto() {
         await this.page.goto(`${process.env.BASE_URL}`);
     }
-    async performLogin(username: string, password: string) {
-        //fill out the form - 2 textfields and click the submit button
-        await this.usernameTextfield.fill(username);
-        await this.passwordTextfield.fill(password);
-        await this.loginButton.click();
-        await this.CreateRoomButton.click();
+
+    async listRoom() {
+        // Fill out the form and click the login button
+        //await expect(this.createRoomButton).toBeVisible();
+        await this.createRoomButton.click();
+    }
+
+    async editButton() {
+        await this.ActionEdit.first().click();
+        const editLink = this.page.locator('#app > div > div.rooms > div > div.menu > a:nth-child(1)');
+        await expect(editLink).toBeVisible();
+        await editLink.click();
+        await this.page.waitForTimeout(4000); // Adjust as needed
+        const editRoom = new CreateRoom(this.page);
+        await editRoom.createRoom("", "", "", "");
+
+    }
+
+    async performBackToList() {
+
+        await this.BackButton.click();
+
 
 
     }
