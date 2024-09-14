@@ -6,6 +6,7 @@ export class DashboardPage {
     readonly logoutButton: Locator;
     readonly ViewRoomButton: Locator;
     readonly ViewClientButton: Locator;
+    readonly ViewBillButton: Locator;
 
 
     constructor(page: Page) {
@@ -17,6 +18,10 @@ export class DashboardPage {
         
         this.ViewClientButton = page.
             locator('div', { hasText: /^ClientsNumber: 2View$/ })
+            .getByRole('link');
+        
+        this.ViewBillButton = page.
+            locator('div', { hasText: /^BillsTotal: 1 \(4500kr\)Paid: 0 \(0kr\)View$/ })
             .getByRole('link');
 
 
@@ -33,6 +38,9 @@ export class DashboardPage {
     }
     async performOpenClient(){
         await this.ViewClientButton.click();
+    }
+    async perfromOpenBill(){
+        await this.ViewBillButton.click();
     }
 
 

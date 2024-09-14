@@ -1,12 +1,12 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-export class ListClientsPage {
+export class ListBillPage {
     //Attributes
     readonly page: Page;
-   /* readonly usernameTextfield: Locator;
+   /*readonly usernameTextfield: Locator;
     readonly passwordTextfield: Locator;
     readonly loginButton: Locator;*/
-    readonly CreateClientButton: Locator;
+    readonly CreateBillButton: Locator;
 
 
 
@@ -19,7 +19,7 @@ export class ListClientsPage {
         this.loginButton = page.getByRole('button', { name: 'Login' });
         this.usernameTextfield = page.locator('input[type="text"]');
         this.passwordTextfield = page.locator('input[type="password"]');*/
-        this.CreateClientButton = page.getByRole('link', { name: 'Create Client' });
+        this.CreateBillButton = page.getByRole('link', { name: 'Create Bill' });
 
     }
 
@@ -27,12 +27,12 @@ export class ListClientsPage {
     async goto() {
         await this.page.goto(`${process.env.BASE_URL}`);
     }
-    async performLogin(/*username: string, password: string*/) {
+    async performBill(/*username: string, password: string*/) {
         //fill out the form - 2 textfields and click the submit button
         //await this.usernameTextfield.fill(username);
         //await this.passwordTextfield.fill(password);
        // await this.loginButton.click();
-        await this.CreateClientButton.click();
+        await this.CreateBillButton.click();
 
 
     }

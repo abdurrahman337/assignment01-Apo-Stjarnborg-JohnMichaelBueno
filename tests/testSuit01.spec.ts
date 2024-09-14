@@ -5,6 +5,9 @@ import { DashboardPage } from './pages/dashboard-page';
 import { faker } from '@faker-js/faker';
 import { CreateClientPage } from './pages/Create-New-Client-Page';
 import { ListClientsPage} from './pages/List-Clients-Page';
+import { ListBillPage } from './pages/List-Bill-Page';
+import { CreateBillPage } from './pages/Create-New-Bill-Page';
+
 
 const randomName = faker.person.firstName();
 const randomPassword = faker.internet.password();
@@ -164,8 +167,8 @@ test.describe('Test suite 01', () => {
     await linkReservation.click();
     await page.waitForTimeout(2000);
     await expect(page.getByText('Number: 3')).toBeVisible();
-    await page.locator('button', { hasText: 'Logout' }).click();
-    await page.waitForTimeout(2000); 
+   // await page.locator('button', { hasText: 'Logout' }).click();
+    //await page.waitForTimeout(2000); 
 
 
 
@@ -217,7 +220,8 @@ test.describe('Test suite 01', () => {
 
   });
 
-
+// await listBillpage.performBill();
+//await createBillPage.createBill("");
 
   //Create Bills
   test('Test Case Create Bills ', async ({ page }) => {
@@ -227,14 +231,14 @@ test.describe('Test suite 01', () => {
     await loginPage.performLogin(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`)
     await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
     await page.waitForTimeout(2000);
-    const divWithBills = page.locator('div').filter({ hasText: /^BillsTotal: 1 \(4500kr\)Paid: 0 \(0kr\)View$/ });
+    const divWithBills = page.locator('div').filter({ hasText: /^BillsTotal: 1 (4500kr)Paid: 0 (0kr)View$/ });
     await divWithBills.getByRole('link').click();
     await page.waitForTimeout(3000);
 
     await page.getByRole('link', { name: 'Create Bill' }).click();
     await page.waitForTimeout(2000);
     await expect(page.getByText('New Bill')).toBeVisible();
-    await page.locator('div').filter({ hasText: /^Value \(SEK\)$/ }).getByRole('spinbutton').fill('100');
+    await page.locator('div').filter({ hasText: /^Value (SEK)$/ }).getByRole('spinbutton').fill('100');
 
     // Click the checkbox with the class '.checkbox'
     await page.locator('.checkbox').click();
@@ -244,7 +248,7 @@ test.describe('Test suite 01', () => {
     const linkBillss = page.getByRole('link', { name: 'Back' });
     await linkBillss.click();
     await page.waitForTimeout(2000);
-    await expect(page.locator('div').filter({ hasText: /^Paid: 1 \(100kr\)$/ })).toBeVisible();
+    await expect(page.locator('div').filter({ hasText: /^Paid: 1 (100kr)$/ })).toBeVisible();
     await page.locator('button', { hasText: 'Logout' }).click();
     await page.waitForTimeout(2000);
 
